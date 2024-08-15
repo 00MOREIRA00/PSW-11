@@ -1,11 +1,44 @@
 {% extends "base.html" %}
+{% load static %}
+{% block 'head' %}
 
-{%block 'title'%}Teste de Titulo{% endblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'usuarios/css/usuarios.css' %}">
+{% endblock 'head' %}
+    
+{% block 'body' %}
 
-{%block 'body'%}
-<h1>Titulo do template</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 d-flex justify-content-center bg-img ">
+        </div>
 
-<p>Texto do template base</p>
-{% endblock %}
+        <div class="col-md-10 d-flex justify-content-center bg-color-dark form-auth">
+            <div class="container-form">
+                <h1 class="text-logo">START-SE</h1>
+                <h1>Logar</h1>
+                <br />
+                <form>
+                    <label>Username</label>
+                    <input type="text" class="form-control input-pers" name="username" placeholder="Digite seu username">
+                    <br />
 
+                    <label>Senha</label>
+                    <input type="password" class="form-control input-pers" name="senha" placeholder="Digite sua senha">
 
+                    <div class="centralizar">
+                        <input type="submit" class="btn btn-indigo" value="Logar">
+                        <a href="" class="texto">Não possuo uma conta</a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+        
+    </div>
+
+</div>
+
+{% endblock 'body' %}

@@ -82,3 +82,13 @@ Primeira coisa que precisamos fazer ao usar um tamplate é dizer a qual arquivo 
 ```
 
 > Dessa forma tudo que adicionemos dentro dos blocks será formatado de acordo com o arquivo base e a formatação que está em cadas seção chamada.
+
+4. Confgurando arquivos Static
+```
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, '/usuarios/static'),)
+STATIC_ROOT = os.path.join('staticfiles')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'s
+```
