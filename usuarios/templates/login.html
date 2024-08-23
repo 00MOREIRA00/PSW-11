@@ -16,8 +16,17 @@
             <div class="container-form">
                 <h1 class="text-logo">START-SE</h1>
                 <h1>Logar</h1>
+
+                {% if messages %}
+                    {% for message in messages %}
+                    <section class="alert {{message.tags}}">
+                        {{message}}
+                    </section>
+                 {% endfor %}
+                {% endif %}
+
                 <br />
-                <form>
+                <form action="{% url 'logar' %}" method="POST"> {% csrf_token %}
                     <label>Username</label>
                     <input type="text" class="form-control input-pers" name="username" placeholder="Digite seu username">
                     <br />
@@ -27,7 +36,7 @@
 
                     <div class="centralizar">
                         <input type="submit" class="btn btn-indigo" value="Logar">
-                        <a href="" class="texto">Não possuo uma conta</a>
+                        <a href="{% url 'cadastro' %}" class="texto">Não possuo uma conta</a>
 
                     </div>
 

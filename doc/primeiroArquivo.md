@@ -99,4 +99,77 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-01:08
+
+## Criando Tela de Cadastro
+
+Pegamos os arquivos html já criadas e vamos apenas fazer o tratamento com as ações que serão tomadas pelo front e criar o processamento do backend.
+
+1. Criamos 
+```
+<form action="{% url 'cadastro' %}" method="POST">{% csrf_token %}
+    <label>Username</label>
+    <input type="text" class="form-control input-pers" name="username" placeholder="Digite seu username">
+    <br />
+                    
+    <label>Senha</label>
+    <input type="password" class="form-control input-pers" name="senha" placeholder="Digite sua senha">
+    <br />
+
+    <label>Confirmar senha</label>
+    <input type="password" class="form-control input-pers" name="confirmar_senha" placeholder="Confirme sua senha">
+
+    <div class="centralizar">
+        <input type="submit" class="btn btn-indigo" value="Cadastrar">
+        <a href="{% url 'logar' %}" class="texto">Já possuo uma conta</a>
+    </div>
+</form>
+```
+
+> Adicionaremos o action do form dizendo que a url que será enviada é a propria e o method de envio é um post. Adicionando tbm o método de segunraça evitando dessa forma maneira de evitar falsificação.
+
+
+Fomos até a view dá página especifica e adicionamos lógica:
+
+if request.method == "GET":
+        return render(request, 'cadastro.html')
+    elif request.method == "POST": 
+        username = request.POST.get('username')
+        senha = request.POST.get('senha')
+        confirmar_senha = request.POST.get('confirmar_senha')
+
+        if not senha == confirmar_senha:
+            messages.add_message(request, constants.ERROR, 'As senhas não coincidem.')
+            return redirect('/usuarios/cadastro')
+        
+        if len(senha) < 6:
+            messages.add_message(request, constants.ERROR, 'A senha precisa ter pelo menos 6 dígitos')
+            return redirect('/usuarios/cadastro')
+
+
+        users = User.objects.filter(username=username)
+        if users.exists():
+            messages.add_message(request, constants.ERROR, 'Já existe um usuário cadastrado com esse username')
+            return redirect('/usuarios/cadastro')
+    
+        user = User.objects.create_user(
+            username=username,
+            password=senha
+        )
+
+        return  redirect('/usuarios/logar')
+
+* Verificamos se a chamada está sendo feita um método GET ou POST pois cada uma tem uma maneira diferente de agir
+
+* Adicionamos verificações especificas para não cumprir o cadastro que seria senha divergente, senha muito curta e usuário já usado
+
+* Depois usamos uma lib do Django cadastramos um usuário na tabela "auth_user"
+
+* Configuramos os alertas para mandar um personalizado, precisamos cadastrar no settings e importar e usar no view
+```
+from django.contrib import messages
+from django.contrib.messages import constants
+```
+
+## Logando
+
+Se tiver o usuário retorna o nome, se não tiver retorna none
