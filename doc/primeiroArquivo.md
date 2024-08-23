@@ -92,3 +92,11 @@ STATIC_ROOT = os.path.join('staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'s
 ```
+
+5. Fazendo migração
+```
+python manage.py makemigrations 
+python manage.py migrate
+```
+
+01:08
