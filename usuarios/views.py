@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.messages import constants
@@ -51,6 +50,4 @@ def logar(request):
         
         messages.add_message(request,constants.ERROR, 'Usuário ou senha inválidos')
         return redirect('/usuarios/logar')
-
-        return HttpResponse('Teste')
         

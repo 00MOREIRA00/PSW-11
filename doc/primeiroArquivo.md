@@ -172,4 +172,44 @@ from django.contrib.messages import constants
 
 ## Logando
 
-Se tiver o usuário retorna o nome, se não tiver retorna none
+O processo de Login é muit similar ao que fazemos para o o cadastro. Pegamos da requisição o username e password e instaciamos esse usuário user usando essa ferramenta de authenticate passando as variaveis. Com essa instancia temos somente a informação se o usários se encontra na base. Caso esteja nós fazemos o login com outro atributo da lib, caso não esteja levantamos erro.
+
+```
+def logar(request):
+    if request.method == "GET":
+        return render(request, 'login.html')
+    if request.method == "POST":
+        username = request.POST.get('username')
+        senha = request.POST.get('senha')
+
+        user = auth.authenticate(request, username=username, password=senha)
+        if user:
+            auth.login(request, user)
+            return redirect('/empresarios/cadastrar_empresa')
+        
+        messages.add_message(request,constants.ERROR, 'Usuário ou senha inválidos')
+        return redirect('/usuarios/logar')
+```
+
+> Se tiver o usuário retorna o nome, se não tiver retorna none
+
+> python manage.py createsuperuser 
+
+
+### Criando novo app
+
+Agora estamos criando um novo app para comportar todas as interações referente a cadastro de empresas
+
+
+
+```
+Passando Valor na View
+
+# Create your views here.
+def cadastrar_empresa(request):
+    x = 1
+    if request.method == 'GET':
+        return render(request, 'cadastrar_empresa.html', {'valor': x})
+```
+
+> enctype='multipart/form-data' Usado quando queremos enviar arquivos em nosso formulario, precisamos passar essa propriedade
