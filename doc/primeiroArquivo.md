@@ -198,18 +198,96 @@ def logar(request):
 
 ### Criando novo app
 
-Agora estamos criando um novo app para comportar todas as interações referente a cadastro de empresas
+Agora estamos criando um novo app para comportar todas as interações referente a cadastro de empresas. Primeira coisa que fazemos é verificar o method da chamada.
+Quando temos method POST, pegamos o valor passado no no input e passamos no campo do model criado e depois salvamos.
 
 
 
 ```
 Passando Valor na View
 
-# Create your views here.
 def cadastrar_empresa(request):
-    x = 1
     if request.method == 'GET':
-        return render(request, 'cadastrar_empresa.html', {'valor': x})
+        return render(request, 'cadastrar_empresa.html', 
+                      {'tempo_existencia': Empresas.tempo_existencia_choices, 'areas': Empresas.area_choices})
+    
+    elif request.method == 'POST':
+        nome = request.POST.get('nome')
+        cnpj = request.POST.get('cnpj')
+        site = request.POST.get('site')
+        tempo_existencia = request.POST.get('tempo_existencia')
+        descricao = request.POST.get('descricao')
+        data_final = request.POST.get('data_final')
+        percentual_equity = request.POST.get('percentual_equity')
+        estagio = request.POST.get('estagio')
+        area = request.POST.get('area')
+        publico_alvo = request.POST.get('publico_alvo')
+        valor = request.POST.get('valor')
+        pitch = request.FILES.get('pitch')
+        logo = request.FILES.get('logo')
+
+
+        # Todo: Realizar validação dos campos
+        try:
+            empresa = Empresas(
+                user=request.user,
+                nome=nome,
+                cnpj=cnpj,
+                site=site,
+                tempo_existencia=tempo_existencia,
+                descricao=descricao,
+                data_final_captacao=data_final,
+                percentual_equity=percentual_equity,
+                estagio=estagio,
+                area=area,
+                publico_alvo=publico_alvo,
+                valor=valor,
+                pitch=pitch,
+                logo=logo
+            )
+
+            empresa.save()
+        except:
+            messages.add_message(request, constants.ERROR, 'Erro interno do sistema!')
+            return redirect('/empresarios/cadastrar_empresa')
+        
+        messages.add_message(request, constants.SUCCESS, 'Empresa criada com sucesso!')
+        return redirect('/empresarios/cadastrar_empresa')
 ```
 
 > enctype='multipart/form-data' Usado quando queremos enviar arquivos em nosso formulario, precisamos passar essa propriedade
+
+> Podemos criar uma variavel na view e chamar lá no html
+
+### Criando Arquivo de HTML parcial
+
+Temos alguns casos onde temos um html que não entra em todos os html, no caso não entra no arquivo de base. Nós criamos um arquivo de html parcial.
+
+```
+<nav class="navbar navbar-expand-lg navbar-dark dark-color">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+	            <a class="nav-link active" aria-current="page" href="">Marketplace</a>
+
+            </li>
+
+            <li class="nav-item">
+	            <a class="nav-link active" href="{% url 'cadastrar_empresa' %}">Quero captar</a>
+
+            </li>
+
+        </ul>
+
+        </div>
+
+    </div>
+    
+</nav>
+```
+
+Para chamar nós usamos o include. Dentro do body do html escolhido nós chamamos. 
+```
+ {% include 'parcials/barra_navegacao.html' %}
+```

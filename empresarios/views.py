@@ -21,7 +21,6 @@ def cadastrar_empresa(request):
         area = request.POST.get('area')
         publico_alvo = request.POST.get('publico_alvo')
         valor = request.POST.get('valor')
-
         pitch = request.FILES.get('pitch')
         logo = request.FILES.get('logo')
 
@@ -46,11 +45,11 @@ def cadastrar_empresa(request):
             )
 
             empresa.save()
-        
         except:
             messages.add_message(request, constants.ERROR, 'Erro interno do sistema!')
             return redirect('/empresarios/cadastrar_empresa')
         
         messages.add_message(request, constants.SUCCESS, 'Empresa criada com sucesso!')
         return redirect('/empresarios/cadastrar_empresa')
+
 
